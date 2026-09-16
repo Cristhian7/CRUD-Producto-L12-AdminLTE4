@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Nuevo Cliente')
+@section('title', 'Editar Cliente')
 
 @section('content')
 <div class="app-content-header">
@@ -17,28 +17,21 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                
-                <!-- Alerta de éxito -->
-                @if(session('exito'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <i class="bi bi-check-circle-fill me-2"></i> {{ session('exito') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif
 
-                <!-- Tarjeta / Card con Formulario AdminLTE -->
-                <div class="card card-primary card-outline">
+                <div class="card card-warning card-outline">
                     <div class="card-header">
-                        <h3 class="card-title">Registrar Nuevo Cliente</h3>
+                        <h3 class="card-title">Editar Cliente #{{ $cliente->id_cliente }}</h3>
                     </div>
                     
-                    <form action="{{ route('clientes.store') }}" method="POST">
+                    <form action="{{ route('clientes.update', $cliente->id_cliente) }}" method="POST">
                         @csrf
+                        @method('PUT') {{-- Requerido para actualizar registros en Laravel --}}
+                        
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="nombre" class="form-label">Nombre <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('nombre') is-invalid @enderror" id="nombre" name="nombre" value="{{ old('nombre') }}" placeholder="Ej. Juan" required>
+                                    <input type="text" class="form-control @error('nombre') is-invalid @enderror" id="nombre" name="nombre" value="{{ old('nombre', $cliente->nombre) }}" required>
                                     @error('nombre')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -46,7 +39,7 @@
 
                                 <div class="col-md-6 mb-3">
                                     <label for="apellido" class="form-label">Apellido <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('apellido') is-invalid @enderror" id="apellido" name="apellido" value="{{ old('apellido') }}" placeholder="Ej. Pérez" required>
+                                    <input type="text" class="form-control @error('apellido') is-invalid @enderror" id="apellido" name="apellido" value="{{ old('apellido', $cliente->apellido) }}" required>
                                     @error('apellido')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -54,16 +47,13 @@
                             </div>
                         </div>
 
-                        <!-- Boton de crear cliente -->
                         <div class="card-footer text-end">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-save me-1"></i> Guardar
-                            </button>
-
-                            <!-- Botón para ver el listado de clientes -->
-                             <a href="{{ route('clientes.index') }}" class="btn btn-secondary me-2">
-                                <i class="bi bi-people-fill me-1"></i> Ver Clientes
+                            <a href="{{ route('clientes.index') }}" class="btn btn-secondary me-2">
+                                <i class="bi bi-x-circle me-1"></i> Cancelar
                             </a>
+                            <button type="submit" class="btn btn-warning">
+                                <i class="bi bi-pencil-square me-1"></i> Actualizar Cliente
+                            </button>
                         </div>
                     </form>
                 </div>
